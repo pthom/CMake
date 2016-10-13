@@ -331,65 +331,73 @@ std::vector<std::string> cmNinjaNormalTargetGenerator::ComputeLinkCmd()
 {
   std::vector<std::string> linkCmds;
   cmMakefile* mf = this->GetMakefile();
-  {
-    std::string linkCmdVar = this->GetGeneratorTarget()->GetCreateRuleVariable(
-      this->TargetLinkLanguage, this->GetConfigName());
-    const char* linkCmd = mf->GetDefinition(linkCmdVar);
-    if (linkCmd) {
-      cmSystemTools::ExpandListArgument(linkCmd, linkCmds);
-      if (this->GetGeneratorTarget()->GetPropertyAsBool("LINK_WHAT_YOU_USE")) {
-        std::string cmakeCommand =
-          this->GetLocalGenerator()->ConvertToOutputFormat(
-            cmSystemTools::GetCMakeCommand(), cmLocalGenerator::SHELL);
-        cmakeCommand += " -E __run_iwyu --lwyu=";
-        cmGeneratorTarget& gt = *this->GetGeneratorTarget();
-        const std::string cfgName = this->GetConfigName();
-        std::string targetOutput = ConvertToNinjaPath(gt.GetFullPath(cfgName));
-        std::string targetOutputReal =
-          this->ConvertToNinjaPath(gt.GetFullPath(cfgName,
-                                                  /*implib=*/false,
-                                                  /*realname=*/true));
-        cmakeCommand += targetOutputReal;
-        cmakeCommand += " || true";
-        linkCmds.push_back(cmakeCommand);
-      }
-      return linkCmds;
-    }
-  }
+
+  std::string linkCmd;
   switch (this->GetGeneratorTarget()->GetType()) {
     case cmStateEnums::STATIC_LIBRARY: {
-      // We have archive link commands set. First, delete the existing archive.
       {
         std::string cmakeCommand =
           this->GetLocalGenerator()->ConvertToOutputFormat(
             cmSystemTools::GetCMakeCommand(), cmOutputConverter::SHELL);
         linkCmds.push_back(cmakeCommand + " -E remove $TARGET_FILE");
       }
+
       // TODO: Use ARCHIVE_APPEND for archives over a certain size.
       {
         std::string linkCmdVar = "CMAKE_";
         linkCmdVar += this->TargetLinkLanguage;
         linkCmdVar += "_ARCHIVE_CREATE";
-        const char* linkCmd = mf->GetRequiredDefinition(linkCmdVar);
-        cmSystemTools::ExpandListArgument(linkCmd, linkCmds);
+        std::string archiveCreate(mf->GetRequiredDefinition(linkCmdVar));
+        cmSystemTools::ExpandListArgument(archiveCreate, linkCmds);
       }
       {
         std::string linkCmdVar = "CMAKE_";
         linkCmdVar += this->TargetLinkLanguage;
         linkCmdVar += "_ARCHIVE_FINISH";
-        const char* linkCmd = mf->GetRequiredDefinition(linkCmdVar);
-        cmSystemTools::ExpandListArgument(linkCmd, linkCmds);
+        const std::string archiveFinish(mf->GetRequiredDefinition(linkCmdVar));
+        cmSystemTools::ExpandListArgument(archiveFinish, linkCmds);
       }
+      // static never supports LINK_WHAT_YOU_USE
       return linkCmds;
     }
     case cmStateEnums::SHARED_LIBRARY:
-    case cmStateEnums::MODULE_LIBRARY:
-    case cmStateEnums::EXECUTABLE:
-      break;
+    case cmStateEnums::MODULE_LIBRARY: {
+      std::string linkCmdVar =
+        this->GetGeneratorTarget()->GetCreateRuleVariable(
+          this->TargetLinkLanguage, this->GetConfigName());
+      linkCmd = std::string(mf->GetDefinition(linkCmdVar));
+    } break;
+    case cmStateEnums::EXECUTABLE: {
+      std::string linkCmdVar =
+        this->GetGeneratorTarget()->GetCreateRuleVariable(
+          this->TargetLinkLanguage, this->GetConfigName());
+      linkCmd = std::string(mf->GetDefinition(linkCmdVar));
+    } break;
     default:
       assert(0 && "Unexpected target type");
+      return std::vector<std::string>();
   }
-  return std::vector<std::string>();
+
+  cmSystemTools::ExpandListArgument(linkCmd, linkCmds);
+
+  if (this->GetGeneratorTarget()->GetProperty("LINK_WHAT_YOU_USE") &&
+      !linkCmds.empty()) {
+    std::string cmakeCommand =
+      this->GetLocalGenerator()->ConvertToOutputFormat(
+        cmSystemTools::GetCMakeCommand(), cmLocalGenerator::SHELL);
+    cmakeCommand += " -E __run_iwyu --lwyu=";
+    cmGeneratorTarget& gt = *this->GetGeneratorTarget();
+    const std::string cfgName = this->GetConfigName();
+    std::string targetOutput = ConvertToNinjaPath(gt.GetFullPath(cfgName));
+    std::string targetOutputReal =
+      this->ConvertToNinjaPath(gt.GetFullPath(cfgName,
+                                              /*implib=*/false,
+                                              /*realname=*/true));
+    cmakeCommand += targetOutputReal;
+    cmakeCommand += " || true";
+    linkCmds.push_back(cmakeCommand);
+  }
+  return linkCmds;
 }
 
 static int calculateCommandLineLengthLimit(int linkRuleLength)
