@@ -20,6 +20,7 @@ extern "C" {
  */
 enum rhash_ids
 {
+#if 0
 	RHASH_CRC32 = 0x01,
 	RHASH_MD4   = 0x02,
 	RHASH_MD5   = 0x04,
@@ -58,6 +59,22 @@ enum rhash_ids
 
 	/** The number of supported hash functions */
 	RHASH_HASH_COUNT = 26
+#else
+	RHASH_MD5        = 0x01,
+	RHASH_SHA1       = 0x02,
+	RHASH_SHA224     = 0x04,
+	RHASH_SHA256     = 0x08,
+	RHASH_SHA384     = 0x10,
+	RHASH_SHA512     = 0x20,
+	RHASH_ALL_HASHES =
+		RHASH_MD5 |
+		RHASH_SHA1 |
+		RHASH_SHA224 |
+		RHASH_SHA256 |
+		RHASH_SHA384 |
+		RHASH_SHA512,
+	RHASH_HASH_COUNT = 6
+#endif
 };
 
 /**
@@ -212,18 +229,6 @@ RHASH_API rhash_uptr_t rhash_transmit(
 #define RMSG_SET_AUTOFINAL 5
 #define RMSG_SET_OPENSSL_MASK 10
 #define RMSG_GET_OPENSSL_MASK 11
-
-#define RMSG_BT_ADD_FILE 32
-#define RMSG_BT_SET_OPTIONS 33
-#define RMSG_BT_SET_ANNOUNCE 34
-#define RMSG_BT_SET_PIECE_LENGTH 35
-#define RMSG_BT_SET_PROGRAM_NAME 36
-#define RMSG_BT_GET_TEXT 37
-#define RMSG_BT_SET_BATCH_SIZE 38
-
-/* possible BitTorrent options for the RMSG_BT_SET_OPTIONS message */
-#define RHASH_BT_OPT_PRIVATE 1
-#define RHASH_BT_OPT_INFOHASH_ONLY 2
 
 /* helper macros */
 
