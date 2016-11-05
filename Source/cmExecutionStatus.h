@@ -3,9 +3,7 @@
 #ifndef cmExecutionStatus_h
 #define cmExecutionStatus_h
 
-#include <cmConfigure.h>
 
-#include "cmStandardIncludes.h"
 
 /** \class cmExecutionStatus
  * \brief Superclass for all command status classes
