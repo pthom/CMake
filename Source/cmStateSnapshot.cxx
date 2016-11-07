@@ -18,6 +18,10 @@
 #include "cmVersion.h"
 #include "cmake.h"
 
+#if defined(__CYGWIN__)
+#include "cmSystemTools.h"
+#endif
+
 cmStateSnapshot::cmStateSnapshot(cmState* state)
   : State(state)
   , Position()
