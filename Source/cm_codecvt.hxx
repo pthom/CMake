@@ -5,9 +5,9 @@
 
 #include <cmConfigure.h>
 
-#include <wchar.h>
 #include <locale>
 #include <vector>
+#include <wchar.h>
 
 class codecvt : public std::codecvt<char, char, mbstate_t>
 {
