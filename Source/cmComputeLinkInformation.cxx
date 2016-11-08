@@ -610,7 +610,7 @@ void cmComputeLinkInformation::AddItem(std::string const& item,
       // Also add the item the interface specifies to be used in its place.
       std::string const& libName = tgt->GetImportedLibName(config);
       if (!libName.empty()) {
-        this->AddItem(libName, 0);
+        this->AddItem(libName, CM_NULLPTR);
       }
     } else {
       // Decide whether to use an import library.
