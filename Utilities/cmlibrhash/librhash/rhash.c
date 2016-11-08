@@ -685,7 +685,6 @@ RHASH_API size_t rhash_print_magnet(char* output, const char* filepath,
 
 	return (output - begin);
 }
-#endif
 
 /* hash sum output */
 
@@ -870,3 +869,4 @@ RHASH_API rhash_uptr_t rhash_transmit(unsigned msg_id, void* dst, rhash_uptr_t l
 	}
 	return 0;
 }
+#endif
