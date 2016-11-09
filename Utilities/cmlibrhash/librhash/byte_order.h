@@ -71,6 +71,10 @@ void rhash_swap_copy_str_to_u64(void* to, int index, const void* from, size_t le
 void rhash_swap_copy_u64_to_str(void* to, const void* from, size_t length);
 void rhash_u32_mem_swap(unsigned *p, int length_in_u32);
 
+#ifndef __has_builtin
+# define __has_builtin(x) 0
+#endif
+
 /* define bswap_32 */
 #if defined(__GNUC__) && defined(CPU_IA32) && !defined(__i386__)
 /* for intel x86 CPU */
@@ -81,22 +85,17 @@ static inline uint32_t bswap_32(uint32_t x) {
 #elif defined(__GNUC__)  && (__GNUC__ >= 4) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 3)
 /* for GCC >= 4.3 */
 # define bswap_32(x) __builtin_bswap32(x)
+#elif defined(__clang__) && __has_builtin(__builtin_bswap32)
+# define bswap_32(x) __builtin_bswap32(x)
 #elif (_MSC_VER > 1300) && (defined(CPU_IA32) || defined(CPU_X64)) /* MS VC */
 # define bswap_32(x) _byteswap_ulong((unsigned long)x)
-#elif !defined(__STRICT_ANSI__)
+#else
 /* general bswap_32 definition */
-static inline uint32_t bswap_32(uint32_t x) {
+static uint32_t bswap_32(uint32_t x) {
 	x = ((x << 8) & 0xFF00FF00) | ((x >> 8) & 0x00FF00FF);
 	return (x >> 16) | (x << 16);
 }
-#else
-#define bswap_32(x) ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) | \
-	(((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
 #endif /* bswap_32 */
-
-#ifndef __has_builtin
-# define __has_builtin(x) 0
-#endif
 
 #if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 3)
 # define bswap_64(x) __builtin_bswap64(x)
