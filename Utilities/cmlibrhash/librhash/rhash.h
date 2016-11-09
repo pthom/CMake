@@ -153,6 +153,7 @@ RHASH_API const char* rhash_get_magnet_name(unsigned hash_id); /* get name part 
 /* note, that rhash_info_by_id() is not exported to a shared library or DLL */
 const rhash_info* rhash_info_by_id(unsigned hash_id); /* get hash sum info by hash id */
 
+#if 0
 /**
  * Flags for printing a hash sum
  */
@@ -185,6 +186,7 @@ enum rhash_print_sum_flags
 	/** print file size in rhash_print_magnet */
 	RHPR_FILESIZE  = 0x40,
 };
+#endif
 
 /* output hash into the given buffer */
 RHASH_API size_t rhash_print_bytes(char* output,
