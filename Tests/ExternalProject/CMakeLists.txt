@@ -363,20 +363,6 @@ if(do_git_tests)
   )
   set_property(TARGET ${proj} PROPERTY FOLDER "GIT")
 
-  # Live git / master (no GIT_TAG), but git config flags
-  #
-  set(proj TutorialStep1-GIT-config)
-  ExternalProject_Add(${proj}
-    GIT_REPOSITORY "${local_git_repo}"
-    GIT_CONFIG core.eol=lf core.autocrlf=input
-    CMAKE_GENERATOR "${CMAKE_GENERATOR}"
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-    INSTALL_COMMAND ""
-    DEPENDS "SetupLocalGITRepository"
-    LOG_UPDATE 1
-  )
-  set_property(TARGET ${proj} PROPERTY FOLDER "GIT")
-
   # git by explicit branch/tag with empty submodule list
   #
   set(proj TutorialStep1-GIT-bytag-withsubmodules)
