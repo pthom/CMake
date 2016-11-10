@@ -12,7 +12,7 @@ class cmLinkLineDeviceComputer : public cmLinkLineComputer
 public:
   cmLinkLineDeviceComputer(cmOutputConverter* outputConverter,
                            cmStateDirectory stateDir);
-  virtual ~cmLinkLineDeviceComputer() CM_OVERRIDE;
+  ~cmLinkLineDeviceComputer() CM_OVERRIDE;
 
   std::string ComputeLinkLibraries(cmComputeLinkInformation& cli,
                                    std::string const& stdLibString)
