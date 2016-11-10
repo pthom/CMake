@@ -80,9 +80,11 @@ void cmMakefileExecutableTargetGenerator::WriteRuleFiles()
   // close the streams
   this->CloseFileStreams();
 }
+
 void cmMakefileExecutableTargetGenerator::WriteDeviceExecutableRule(
   bool relink)
 {
+#ifdef CMAKE_BUILD_WITH_CMAKE
   const std::string cuda_lang("CUDA");
   cmGeneratorTarget::LinkClosure const* closure =
     this->GeneratorTarget->GetLinkClosure(this->ConfigName);
@@ -286,6 +288,9 @@ void cmMakefileExecutableTargetGenerator::WriteDeviceExecutableRule(
   // Clean all the possible executable names and symlinks.
   this->CleanFiles.insert(this->CleanFiles.end(), exeCleanFiles.begin(),
                           exeCleanFiles.end());
+#else
+  static_cast<void>(relink);
+#endif
 }
 
 void cmMakefileExecutableTargetGenerator::WriteExecutableRule(bool relink)
