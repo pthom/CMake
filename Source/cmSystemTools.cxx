@@ -646,11 +646,11 @@ bool cmSystemTools::RunSingleCommand(std::vector<std::string> const& command,
 
     if (outputflag != OUTPUT_NONE) {
       processOutput.DecodeText(std::string(), strdata, 1);
-      if (strdata.size() > 0) {
+      if (!strdata.empty()) {
         cmSystemTools::Stdout(strdata.c_str(), strdata.size());
       }
       processOutput.DecodeText(std::string(), strdata, 2);
-      if (strdata.size() > 0) {
+      if (!strdata.empty()) {
         cmSystemTools::Stderr(strdata.c_str(), strdata.size());
       }
     }
