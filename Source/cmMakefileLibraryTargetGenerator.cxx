@@ -270,6 +270,7 @@ void cmMakefileLibraryTargetGenerator::WriteFrameworkRules(bool relink)
 void cmMakefileLibraryTargetGenerator::WriteDeviceLibraryRules(
   const std::string& linkRuleVar, const std::string& extraFlags, bool relink)
 {
+#ifdef CMAKE_BUILD_WITH_CMAKE
   // TODO: Merge the methods that call this method to avoid
   // code duplication.
   std::vector<std::string> commands;
@@ -433,6 +434,11 @@ void cmMakefileLibraryTargetGenerator::WriteDeviceLibraryRules(
 
   // Write the main driver rule to build everything in this target.
   this->WriteTargetDriverRule(targetOutputReal, relink);
+#else
+  static_cast<void>(linkRuleVar);
+  static_cast<void>(extraFlags);
+  static_cast<void>(relink);
+#endif
 }
 
 void cmMakefileLibraryTargetGenerator::WriteLibraryRules(
