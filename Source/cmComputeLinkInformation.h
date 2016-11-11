@@ -70,7 +70,6 @@ public:
   std::string const& GetRPathLinkFlag() const { return this->RPathLinkFlag; }
   std::string GetRPathLinkString();
 
-  std::string GetConfig() const { return this->Config; }
 private:
   void AddItem(std::string const& item, const cmGeneratorTarget* tgt);
   void AddSharedDepItem(std::string const& item, cmGeneratorTarget const* tgt);
