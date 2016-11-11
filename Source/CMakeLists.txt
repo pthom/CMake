@@ -298,8 +298,6 @@ set(SRCS
   cmLinkItem.h
   cmLinkLineComputer.cxx
   cmLinkLineComputer.h
-  cmLinkLineDeviceComputer.cxx
-  cmLinkLineDeviceComputer.h
   cmListFileCache.cxx
   cmListFileCache.h
   cmListFileLexer.c

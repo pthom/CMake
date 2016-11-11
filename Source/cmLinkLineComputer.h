@@ -33,10 +33,10 @@ public:
   std::string ComputeFrameworkPath(cmComputeLinkInformation& cli,
                                    std::string const& fwSearchFlag);
 
-  virtual std::string ComputeLinkLibraries(cmComputeLinkInformation& cli,
-                                           std::string const& stdLibString);
+  std::string ComputeLinkLibraries(cmComputeLinkInformation& cli,
+                                   std::string const& stdLibString);
 
-protected:
+private:
   std::string ComputeLinkLibs(cmComputeLinkInformation& cli);
   std::string ComputeRPath(cmComputeLinkInformation& cli);
 
