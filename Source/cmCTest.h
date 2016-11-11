@@ -5,7 +5,6 @@
 
 #include <cmConfigure.h>
 
-#include <cmProcessOutput.h>
 #include <cmsys/String.hxx>
 #include <map>
 #include <set>
@@ -49,7 +48,6 @@ class cmCTest
   friend class cmCTestMultiProcessHandler;
 
 public:
-  typedef cmProcessOutput::Encoding Encoding;
   /** Enumerate parts of the testing and submission process.  */
   enum Part
   {
@@ -269,8 +267,7 @@ public:
    */
   bool RunCommand(const char* command, std::string* stdOut,
                   std::string* stdErr, int* retVal = CM_NULLPTR,
-                  const char* dir = CM_NULLPTR, double timeout = 0.0,
-                  Encoding encoding = cmProcessOutput::Auto);
+                  const char* dir = CM_NULLPTR, double timeout = 0.0);
 
   /**
    * Clean/make safe for xml the given value such that it may be used as
@@ -289,8 +286,7 @@ public:
    * and retVal is return value or exception.
    */
   int RunMakeCommand(const char* command, std::string& output, int* retVal,
-                     const char* dir, int timeout, std::ostream& ofs,
-                     Encoding encoding = cmProcessOutput::Auto);
+                     const char* dir, int timeout, std::ostream& ofs);
 
   /** Return the current tag */
   std::string GetCurrentTag();
@@ -337,8 +333,7 @@ public:
    */
   int RunTest(std::vector<const char*> args, std::string* output, int* retVal,
               std::ostream* logfile, double testTimeOut,
-              std::vector<std::string>* environment,
-              Encoding encoding = cmProcessOutput::Auto);
+              std::vector<std::string>* environment);
 
   /**
    * Execute handler and return its result. If the handler fails, it returns

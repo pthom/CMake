@@ -3,7 +3,6 @@
 #include "cmProcess.h"
 
 #include <cmConfigure.h>
-#include <cmProcessOutput.h>
 #include <cmSystemTools.h>
 #include <iostream>
 
@@ -105,8 +104,6 @@ bool cmProcess::Buffer::GetLast(std::string& line)
 
 int cmProcess::GetNextOutputLine(std::string& line, double timeout)
 {
-  cmProcessOutput processOutput;
-  std::string strdata;
   for (;;) {
     // Look for lines already buffered.
     if (this->Output.GetLine(line)) {
@@ -121,16 +118,11 @@ int cmProcess::GetNextOutputLine(std::string& line, double timeout)
       return cmsysProcess_Pipe_Timeout;
     }
     if (p == cmsysProcess_Pipe_STDOUT) {
-      processOutput.DecodeText(data, length, strdata);
-      this->Output.insert(this->Output.end(), strdata.begin(), strdata.end());
+      this->Output.insert(this->Output.end(), data, data + length);
     } else { // p == cmsysProcess_Pipe_None
       // The process will provide no more data.
       break;
     }
-  }
-  processOutput.DecodeText(std::string(), strdata);
-  if (!strdata.empty()) {
-    this->Output.insert(this->Output.end(), strdata.begin(), strdata.end());
   }
 
   // Look for partial last lines.

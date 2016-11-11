@@ -116,13 +116,11 @@ protected:
 
   /** Run a command line and send output to given parsers.  */
   bool RunChild(char const* const* cmd, OutputParser* out, OutputParser* err,
-                const char* workDir = CM_NULLPTR,
-                Encoding encoding = cmProcessOutput::Auto);
+                const char* workDir = CM_NULLPTR);
 
   /** Run VC update command line and send output to given parsers.  */
   bool RunUpdateCommand(char const* const* cmd, OutputParser* out,
-                        OutputParser* err = CM_NULLPTR,
-                        Encoding encoding = cmProcessOutput::Auto);
+                        OutputParser* err = CM_NULLPTR);
 
   /** Write xml element for one file.  */
   void WriteXMLEntry(cmXMLWriter& xml, std::string const& path,
