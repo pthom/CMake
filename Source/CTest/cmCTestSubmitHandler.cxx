@@ -7,7 +7,6 @@
 #include "cmCTestScriptHandler.h"
 #include "cmCurl.h"
 #include "cmGeneratedFileStream.h"
-#include "cmProcessOutput.h"
 #include "cmState.h"
 #include "cmStateTypes.h"
 #include "cmSystemTools.h"
@@ -802,20 +801,10 @@ bool cmCTestSubmitHandler::SubmitUsingSCP(const std::string& scp_command,
     cmsysProcess_Execute(cp);
     char* data;
     int length;
-    cmProcessOutput processOutput;
-    std::string strdata;
 
     while (cmsysProcess_WaitForData(cp, &data, &length, CM_NULLPTR)) {
-      processOutput.DecodeText(data, length, strdata);
       cmCTestOptionalLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
-                         cmCTestLogWrite(strdata.c_str(), strdata.size()),
-                         this->Quiet);
-    }
-    processOutput.DecodeText(std::string(), strdata);
-    if (!strdata.empty()) {
-      cmCTestOptionalLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
-                         cmCTestLogWrite(strdata.c_str(), strdata.size()),
-                         this->Quiet);
+                         cmCTestLogWrite(data, length), this->Quiet);
     }
 
     cmsysProcess_WaitForExit(cp, CM_NULLPTR);

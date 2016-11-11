@@ -1,44 +1,27 @@
 /* Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
    file Copyright.txt or https://cmake.org/licensing for details.  */
 #include "cmProcessTools.h"
-#include "cmProcessOutput.h"
 
 #include <cmsys/Process.h>
 #include <ostream>
 
 void cmProcessTools::RunProcess(struct cmsysProcess_s* cp, OutputParser* out,
-                                OutputParser* err, Encoding encoding)
+                                OutputParser* err)
 {
   cmsysProcess_Execute(cp);
   char* data = CM_NULLPTR;
   int length = 0;
   int p;
-  cmProcessOutput processOutput(encoding);
-  std::string strdata;
   while ((out || err) &&
          (p = cmsysProcess_WaitForData(cp, &data, &length, CM_NULLPTR), p)) {
     if (out && p == cmsysProcess_Pipe_STDOUT) {
-      processOutput.DecodeText(data, length, strdata, 1);
-      if (!out->Process(strdata.c_str(), int(strdata.size()))) {
+      if (!out->Process(data, length)) {
         out = CM_NULLPTR;
       }
     } else if (err && p == cmsysProcess_Pipe_STDERR) {
-      processOutput.DecodeText(data, length, strdata, 2);
-      if (!err->Process(strdata.c_str(), int(strdata.size()))) {
+      if (!err->Process(data, length)) {
         err = CM_NULLPTR;
       }
-    }
-  }
-  if (out) {
-    processOutput.DecodeText(std::string(), strdata, 1);
-    if (!strdata.empty()) {
-      out->Process(strdata.c_str(), int(strdata.size()));
-    }
-  }
-  if (err) {
-    processOutput.DecodeText(std::string(), strdata, 2);
-    if (!strdata.empty()) {
-      out->Process(strdata.c_str(), int(strdata.size()));
     }
   }
   cmsysProcess_WaitForExit(cp, CM_NULLPTR);

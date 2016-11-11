@@ -7,7 +7,6 @@
 
 #include "cmCTestGenericHandler.h"
 
-#include <cmProcessOutput.h>
 #include <cmsys/RegularExpression.hxx>
 #include <deque>
 #include <iosfwd>
@@ -26,7 +25,6 @@ class cmCTestBuildHandler : public cmCTestGenericHandler
 {
 public:
   typedef cmCTestGenericHandler Superclass;
-  typedef cmProcessOutput::Encoding Encoding;
 
   /*
    * The main entry point for this class
@@ -51,8 +49,7 @@ private:
   //! Run command specialized for make and configure. Returns process status
   // and retVal is return value or exception.
   int RunMakeCommand(const char* command, int* retVal, const char* dir,
-                     int timeout, std::ostream& ofs,
-                     Encoding encoding = cmProcessOutput::Auto);
+                     int timeout, std::ostream& ofs);
 
   enum
   {
@@ -110,7 +107,7 @@ private:
 
   typedef std::deque<char> t_BuildProcessingQueueType;
 
-  void ProcessBuffer(const char* data, size_t length, size_t& tick,
+  void ProcessBuffer(const char* data, int length, size_t& tick,
                      size_t tick_len, std::ostream& ofs,
                      t_BuildProcessingQueueType* queue);
   int ProcessSingleLine(const char* data);
