@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 #include "cmMakefile.h"
-#include "cmProcessOutput.h"
 #include "cmSystemTools.h"
 
 class cmExecutionStatus;
@@ -117,7 +116,7 @@ bool cmExecProgramCommand::InitialPass(std::vector<std::string> const& args,
 
 bool cmExecProgramCommand::RunCommand(const char* command, std::string& output,
                                       int& retVal, const char* dir,
-                                      bool verbose, Encoding encoding)
+                                      bool verbose)
 {
   if (cmSystemTools::GetRunCommandOutput()) {
     verbose = false;
@@ -215,28 +214,17 @@ bool cmExecProgramCommand::RunCommand(const char* command, std::string& output,
   int length;
   char* data;
   int p;
-  cmProcessOutput processOutput(encoding);
-  std::string strdata;
   while ((p = cmsysProcess_WaitForData(cp, &data, &length, CM_NULLPTR), p)) {
     if (p == cmsysProcess_Pipe_STDOUT || p == cmsysProcess_Pipe_STDERR) {
       if (verbose) {
-        processOutput.DecodeText(data, length, strdata);
-        cmSystemTools::Stdout(strdata.c_str(), strdata.size());
+        cmSystemTools::Stdout(data, length);
       }
       output.append(data, length);
     }
   }
 
-  if (verbose) {
-    processOutput.DecodeText(std::string(), strdata);
-    if (!strdata.empty()) {
-      cmSystemTools::Stdout(strdata.c_str(), strdata.size());
-    }
-  }
-
   // All output has been read.  Wait for the process to exit.
   cmsysProcess_WaitForExit(cp, CM_NULLPTR);
-  processOutput.DecodeText(output, output);
 
   // Check the result of running the process.
   std::string msg;

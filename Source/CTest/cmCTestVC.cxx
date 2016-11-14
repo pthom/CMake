@@ -76,8 +76,7 @@ bool cmCTestVC::InitialCheckout(const char* command)
 }
 
 bool cmCTestVC::RunChild(char const* const* cmd, OutputParser* out,
-                         OutputParser* err, const char* workDir,
-                         Encoding encoding)
+                         OutputParser* err, const char* workDir)
 {
   this->Log << this->ComputeCommandLine(cmd) << "\n";
 
@@ -85,7 +84,7 @@ bool cmCTestVC::RunChild(char const* const* cmd, OutputParser* out,
   cmsysProcess_SetCommand(cp, cmd);
   workDir = workDir ? workDir : this->SourceDirectory.c_str();
   cmsysProcess_SetWorkingDirectory(cp, workDir);
-  this->RunProcess(cp, out, err, encoding);
+  this->RunProcess(cp, out, err);
   int result = cmsysProcess_GetExitValue(cp);
   cmsysProcess_Delete(cp);
   return result == 0;
@@ -103,7 +102,7 @@ std::string cmCTestVC::ComputeCommandLine(char const* const* cmd)
 }
 
 bool cmCTestVC::RunUpdateCommand(char const* const* cmd, OutputParser* out,
-                                 OutputParser* err, Encoding encoding)
+                                 OutputParser* err)
 {
   // Report the command line.
   this->UpdateCommandLine = this->ComputeCommandLine(cmd);
@@ -113,7 +112,7 @@ bool cmCTestVC::RunUpdateCommand(char const* const* cmd, OutputParser* out,
   }
 
   // Run the command.
-  return this->RunChild(cmd, out, err, CM_NULLPTR, encoding);
+  return this->RunChild(cmd, out, err);
 }
 
 std::string cmCTestVC::GetNightlyTime()

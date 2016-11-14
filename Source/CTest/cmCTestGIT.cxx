@@ -624,7 +624,7 @@ void cmCTestGIT::LoadRevisions()
 
   CommitParser out(this, "dt-out> ");
   OutputLogger err(this->Log, "dt-err> ");
-  this->RunProcess(cp, &out, &err, cmProcessOutput::UTF8);
+  this->RunProcess(cp, &out, &err);
 
   // Send one extra zero-byte to terminate the last record.
   out.Process("", 1);
