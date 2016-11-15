@@ -2,7 +2,5 @@
 
 100% tests passed, 0 tests failed out of 1
 .*
--- Processing memory checking output:
-MemCheck log files can be found here:.*corresponds to test number.
-.*MemoryChecker.*log
+-- Processing memory checking output:( )
 Memory checking results:
