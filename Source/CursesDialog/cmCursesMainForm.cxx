@@ -348,7 +348,7 @@ void cmCursesMainForm::PrintKeys(int process /* = 0 */)
   }
 
   char fmt_s[] = "%s";
-  if (cw == CM_NULLPTR || cw->PrintKeys() == false) {
+  if (cw == CM_NULLPTR || !cw->PrintKeys()) {
     char firstLine[512] = "";
     char secondLine[512] = "";
     char thirdLine[512] = "";
