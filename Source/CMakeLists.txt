@@ -332,6 +332,8 @@ set(SRCS
   cmOrderDirectories.h
   cmPolicies.h
   cmPolicies.cxx
+  cmProcessOutput.cxx
+  cmProcessOutput.h
   cmProcessTools.cxx
   cmProcessTools.h
   cmProperty.cxx
@@ -633,6 +635,9 @@ set(SRCS
   cm_codecvt.hxx
   cm_codecvt.cxx
   )
+
+SET_PROPERTY(SOURCE cmProcessOutput.cxx APPEND PROPERTY COMPILE_DEFINITIONS
+  KWSYS_ENCODING_DEFAULT_CODEPAGE=${KWSYS_ENCODING_DEFAULT_CODEPAGE})
 
 # Kdevelop only works on UNIX and not windows
 if(UNIX)
