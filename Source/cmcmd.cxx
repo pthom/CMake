@@ -327,6 +327,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         iwyu_cmd.insert(iwyu_cmd.end(), orig_cmd.begin() + 1, orig_cmd.end());
 
         // Run the iwyu command line.  Capture its stderr and hide its stdout.
+        // Ignore its return code because the tool always returns non-zero.
         std::string stdErr;
         if (!cmSystemTools::RunSingleCommand(iwyu_cmd, CM_NULLPTR, &stdErr,
                                              &ret, CM_NULLPTR,
@@ -357,11 +358,13 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
 
         // Run the tidy command line.  Capture its stdout and hide its stderr.
         std::string stdOut;
-        if (!cmSystemTools::RunSingleCommand(tidy_cmd, &stdOut, CM_NULLPTR,
-                                             &ret, CM_NULLPTR,
-                                             cmSystemTools::OUTPUT_NONE)) {
-          std::cerr << "Error running '" << tidy_cmd[0] << "'\n";
-          return 1;
+        std::string stdErr;
+        if (!cmSystemTools::RunSingleCommand(tidy_cmd, &stdOut, &stdErr, &ret,
+                                             CM_NULLPTR,
+                                             cmSystemTools::OUTPUT_NONE) ||
+            ret != 0) {
+          std::cerr << "Error running '" << tidy_cmd[0] << "':\n" << stdErr;
+          return ret != 0 ? ret : 1;
         }
         // Output the stdout from clang-tidy to stderr
         std::cerr << stdOut;
@@ -377,11 +380,15 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
 
         // Run the ldd -u -r command line.
         // Capture its stdout and hide its stderr.
+        // Ignore its return code because the tool always returns non-zero
+        // if there are any warnings, but we just want to warn.
         std::string stdOut;
-        if (!cmSystemTools::RunSingleCommand(lwyu_cmd, &stdOut, CM_NULLPTR,
-                                             &ret, CM_NULLPTR,
+        std::string stdErr;
+        if (!cmSystemTools::RunSingleCommand(lwyu_cmd, &stdOut, &stdErr, &ret,
+                                             CM_NULLPTR,
                                              cmSystemTools::OUTPUT_NONE)) {
-          std::cerr << "Error running '" << lwyu_cmd[0] << "'\n";
+          std::cerr << "Error running '" << lwyu_cmd[0] << "': " << stdErr
+                    << "\n";
           return 1;
         }
 
