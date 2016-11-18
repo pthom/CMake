@@ -362,7 +362,8 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         if (!cmSystemTools::RunSingleCommand(tidy_cmd, &stdOut, &stdErr, &ret,
                                              CM_NULLPTR,
                                              cmSystemTools::OUTPUT_NONE)) {
-          std::cerr << "Error running '" << tidy_cmd[0] << "':\n" << stdErr;
+          std::cerr << "Error running '" << tidy_cmd[0] << "': " << stdErr
+                    << "\n";
           return 1;
         }
         // Output the stdout from clang-tidy to stderr
