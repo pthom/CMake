@@ -361,13 +361,17 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         std::string stdErr;
         if (!cmSystemTools::RunSingleCommand(tidy_cmd, &stdOut, &stdErr, &ret,
                                              CM_NULLPTR,
-                                             cmSystemTools::OUTPUT_NONE) ||
-            ret != 0) {
+                                             cmSystemTools::OUTPUT_NONE)) {
           std::cerr << "Error running '" << tidy_cmd[0] << "':\n" << stdErr;
-          return ret != 0 ? ret : 1;
+          return 1;
         }
         // Output the stdout from clang-tidy to stderr
         std::cerr << stdOut;
+        // If clang-tidy exited with an error do the same.
+        if (ret != 0) {
+          std::cerr << stdErr;
+          return ret;
+        }
       }
       if (!lwyu.empty()) {
         // Construct the ldd -r -u (link what you use lwyu) command line
