@@ -1,2 +1,1 @@
-Error running '[^']*Tests/RunCMake/pseudo_tidy[^']*':
 bad command line arg '-bad'
