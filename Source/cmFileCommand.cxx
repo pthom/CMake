@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <assert.h>
-#include <cm_curl.h>
 #include <cm_kwiml.h>
 #include <cmsys/Directory.hxx>
 #include <cmsys/FStream.hxx>
