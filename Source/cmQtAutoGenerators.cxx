@@ -1393,7 +1393,7 @@ bool cmQtAutoGenerators::GenerateQrc(const std::string& qrcInputFile,
 
   if (this->GenerateAll || generateQrc) {
     {
-      std::string msg = "Generating QRC source ";
+      std::string msg = "Generating RCC source ";
       msg += qrcOutputFile;
       this->LogBold(msg);
     }
