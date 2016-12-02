@@ -990,8 +990,8 @@ void cmQtAutoGenerators::ParseHeaders(
 
       std::string macroName;
       if (requiresMocing(contents, macroName)) {
-        notIncludedMocs[headerName] = this->TargetBuildSubDir +
-          fpathCheckSum.getPart(headerName) + "/moc_" +
+        notIncludedMocs[headerName] = fpathCheckSum.getPart(headerName) +
+          "/moc_" +
           cmsys::SystemTools::GetFilenameWithoutLastExtension(headerName) +
           ".cpp";
       }
@@ -1025,26 +1025,32 @@ bool cmQtAutoGenerators::GenerateMocFiles(
   }
 
   // generate moc files that are included by source files.
-  for (std::map<std::string, std::string>::const_iterator it =
-         includedMocs.begin();
-       it != includedMocs.end(); ++it) {
-    if (!this->GenerateMoc(it->first, it->second)) {
-      if (this->RunMocFailed) {
-        return false;
+  {
+    const std::string subDirPrefix = "include/";
+    for (std::map<std::string, std::string>::const_iterator it =
+           includedMocs.begin();
+         it != includedMocs.end(); ++it) {
+      if (!this->GenerateMoc(it->first, it->second, subDirPrefix)) {
+        if (this->RunMocFailed) {
+          return false;
+        }
       }
     }
   }
 
   // generate moc files that are _not_ included by source files.
   bool automocCppChanged = false;
-  for (std::map<std::string, std::string>::const_iterator it =
-         notIncludedMocs.begin();
-       it != notIncludedMocs.end(); ++it) {
-    if (this->GenerateMoc(it->first, it->second)) {
-      automocCppChanged = true;
-    } else {
-      if (this->RunMocFailed) {
-        return false;
+  {
+    const std::string subDirPrefix;
+    for (std::map<std::string, std::string>::const_iterator it =
+           notIncludedMocs.begin();
+         it != notIncludedMocs.end(); ++it) {
+      if (this->GenerateMoc(it->first, it->second, subDirPrefix)) {
+        automocCppChanged = true;
+      } else {
+        if (this->RunMocFailed) {
+          return false;
+        }
       }
     }
   }
@@ -1058,13 +1064,11 @@ bool cmQtAutoGenerators::GenerateMocFiles(
       // Dummy content
       outStream << "enum some_compilers { need_more_than_nothing };\n";
     } else {
-      // Includes content
+      // Valid content
       for (std::map<std::string, std::string>::const_iterator it =
              notIncludedMocs.begin();
            it != notIncludedMocs.end(); ++it) {
-        outStream << "#include \""
-                  << it->second.substr(this->TargetBuildSubDir.size())
-                  << "\"\n";
+        outStream << "#include \"" << it->second << "\"\n";
       }
     }
     outStream.flush();
@@ -1121,21 +1125,21 @@ bool cmQtAutoGenerators::GenerateMocFiles(
  * @return True if a moc file was created. False may indicate an error.
  */
 bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
-                                     const std::string& mocFileName)
+                                     const std::string& mocFileName,
+                                     const std::string& subDirPrefix)
 {
-  const std::string mocFilePath = this->Builddir + mocFileName;
+  const std::string mocFileRel =
+    this->TargetBuildSubDir + subDirPrefix + mocFileName;
+  const std::string mocFileAbs = this->Builddir + mocFileRel;
   int sourceNewerThanMoc = 0;
-  bool success = cmsys::SystemTools::FileTimeCompare(sourceFile, mocFilePath,
+  bool success = cmsys::SystemTools::FileTimeCompare(sourceFile, mocFileAbs,
                                                      &sourceNewerThanMoc);
   if (this->GenerateAll || !success || sourceNewerThanMoc >= 0) {
-    {
-      std::string msg = "Generating MOC source ";
-      msg += mocFileName;
-      this->LogBold(msg);
-    }
+    // Log
+    this->LogBold("Generating MOC source " + mocFileRel);
 
     // Make sure the parent directory exists
-    if (!this->makeParentDirectory(mocFilePath)) {
+    if (!this->makeParentDirectory(mocFileAbs)) {
       this->RunMocFailed = true;
       return false;
     }
@@ -1152,7 +1156,7 @@ bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
     command.push_back("-DWIN32");
 #endif
     command.push_back("-o");
-    command.push_back(mocFilePath);
+    command.push_back(mocFileAbs);
     command.push_back(sourceFile);
 
     if (this->Verbose) {
@@ -1166,12 +1170,11 @@ bool cmQtAutoGenerators::GenerateMoc(const std::string& sourceFile,
     if (!result || retVal) {
       {
         std::ostringstream err;
-        err << "AUTOGEN: error: moc process for " << mocFilePath
-            << " failed:\n"
+        err << "AUTOGEN: error: moc process for " << mocFileRel << " failed:\n"
             << output << std::endl;
         this->LogError(err.str());
       }
-      cmSystemTools::RemoveFile(mocFilePath);
+      cmSystemTools::RemoveFile(mocFileAbs);
       this->RunMocFailed = true;
       return false;
     }
@@ -1246,20 +1249,19 @@ bool cmQtAutoGenerators::GenerateUi(const std::string& realName,
                                     const std::string& uiInputFile,
                                     const std::string& uiOutputFile)
 {
-  const std::string uiBuildFile = this->Builddir + uiOutputFile;
+  const std::string uicFileRel =
+    this->TargetBuildSubDir + "include/" + uiOutputFile;
+  const std::string uicFileAbs = this->Builddir + uicFileRel;
 
   int sourceNewerThanUi = 0;
-  bool success = cmsys::SystemTools::FileTimeCompare(uiInputFile, uiBuildFile,
+  bool success = cmsys::SystemTools::FileTimeCompare(uiInputFile, uicFileAbs,
                                                      &sourceNewerThanUi);
   if (this->GenerateAll || !success || sourceNewerThanUi >= 0) {
-    {
-      std::string msg = "Generating UIC header ";
-      msg += uiOutputFile;
-      this->LogBold(msg);
-    }
+    // Log
+    this->LogBold("Generating UIC header " + uicFileRel);
 
     // Make sure the parent directory exists
-    if (!this->makeParentDirectory(uiBuildFile)) {
+    if (!this->makeParentDirectory(uicFileAbs)) {
       this->RunUicFailed = true;
       return false;
     }
@@ -1279,7 +1281,7 @@ bool cmQtAutoGenerators::GenerateUi(const std::string& realName,
     command.insert(command.end(), opts.begin(), opts.end());
 
     command.push_back("-o");
-    command.push_back(uiBuildFile);
+    command.push_back(uicFileAbs);
     command.push_back(uiInputFile);
 
     if (this->Verbose) {
@@ -1292,12 +1294,12 @@ bool cmQtAutoGenerators::GenerateUi(const std::string& realName,
     if (!result || retVal) {
       {
         std::ostringstream err;
-        err << "AUTOUIC: error: uic process for " << uiOutputFile
+        err << "AUTOUIC: error: uic process for " << uicFileRel
             << " needed by\n \"" << realName << "\"\nfailed:\n"
             << output << std::endl;
         this->LogError(err.str());
       }
-      cmSystemTools::RemoveFile(uiOutputFile);
+      cmSystemTools::RemoveFile(uicFileAbs);
       this->RunUicFailed = true;
       return false;
     }
