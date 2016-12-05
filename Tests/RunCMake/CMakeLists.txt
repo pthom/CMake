@@ -215,7 +215,14 @@ add_RunCMake_test(project -DCMake_TEST_RESOURCES=${CMake_TEST_RESOURCES})
 add_RunCMake_test(return)
 add_RunCMake_test(set_property)
 add_RunCMake_test(string)
-add_RunCMake_test(try_compile)
+add_RunCMake_test(try_compile
+  -DCMAKE_C_COMPILER_ID=${CMAKE_C_COMPILER_ID}
+  -DCMAKE_C_COMPILER_VERSION=${CMAKE_C_COMPILER_VERSION}
+  -DCMAKE_C_STANDARD_DEFAULT=${CMAKE_C_STANDARD_DEFAULT}
+  -DCMAKE_CXX_COMPILER_ID=${CMAKE_CXX_COMPILER_ID}
+  -DCMAKE_CXX_COMPILER_VERSION=${CMAKE_CXX_COMPILER_VERSION}
+  -DCMAKE_CXX_STANDARD_DEFAULT=${CMAKE_CXX_STANDARD_DEFAULT}
+  )
 add_RunCMake_test(try_run)
 add_RunCMake_test(set)
 add_RunCMake_test(variable_watch)
