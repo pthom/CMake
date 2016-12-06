@@ -345,7 +345,7 @@ static std::string RccGetExecutable(cmGeneratorTarget const* target,
 {
   cmLocalGenerator* lg = target->GetLocalGenerator();
 
-  const std::string targetName = target->GetName();
+  std::string const& targetName = target->GetName();
   if (qtMajorVersion == "5") {
     cmGeneratorTarget* qt5Rcc = lg->FindGeneratorTargetToUse("Qt5::rcc");
     if (!qt5Rcc) {
@@ -353,7 +353,8 @@ static std::string RccGetExecutable(cmGeneratorTarget const* target,
       return std::string();
     }
     return qt5Rcc->ImportedGetLocation("");
-  } else if (qtMajorVersion == "4") {
+  }
+  if (qtMajorVersion == "4") {
     cmGeneratorTarget* qt4Rcc = lg->FindGeneratorTargetToUse("Qt4::rcc");
     if (!qt4Rcc) {
       cmSystemTools::Error("Qt4::rcc target not found ", targetName.c_str());

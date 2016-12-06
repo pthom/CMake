@@ -182,11 +182,7 @@ bool cmQtAutoGenerators::Run(const std::string& targetDirectory,
       return false;
     }
   }
-  if (!this->WriteOldMocDefinitionsFile(targetDirectory)) {
-    return false;
-  }
-
-  return true;
+  return this->WriteOldMocDefinitionsFile(targetDirectory);
 }
 
 bool cmQtAutoGenerators::ReadAutogenInfoFile(
