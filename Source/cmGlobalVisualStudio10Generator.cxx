@@ -126,7 +126,7 @@ bool cmGlobalVisualStudio10Generator::SetGeneratorPlatform(
   }
   if (this->GetPlatformName() == "Itanium" ||
       this->GetPlatformName() == "x64") {
-    if (this->IsExpressEdition() && !this->Find64BitTools(mf)) {
+    if (!this->Find64BitTools(mf)) {
       return false;
     }
   }
@@ -474,10 +474,14 @@ void cmGlobalVisualStudio10Generator::GenerateBuildCommand(
 bool cmGlobalVisualStudio10Generator::Find64BitTools(cmMakefile* mf)
 {
   if (this->DefaultPlatformToolset == "v100") {
-    // The v100 64-bit toolset does not exist in the express edition.
-    this->DefaultPlatformToolset.clear();
+    if (this->IsExpressEdition()) {
+      // The v100 64-bit toolset does not exist in the express edition.
+      this->DefaultPlatformToolset.clear();
+    }
   }
-  if (this->GetPlatformToolset()) {
+  // Find the Windows7.1SDK tools when using the express edition
+  // and no specified or default toolset has been selected.
+  if (!this->IsExpressEdition() || this->GetPlatformToolset()) {
     return true;
   }
   // This edition does not come with 64-bit tools.  Look for them.
