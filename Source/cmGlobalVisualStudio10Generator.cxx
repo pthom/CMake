@@ -474,7 +474,12 @@ void cmGlobalVisualStudio10Generator::GenerateBuildCommand(
 bool cmGlobalVisualStudio10Generator::Find64BitTools(cmMakefile* mf)
 {
   if (this->DefaultPlatformToolset == "v100") {
-    if (this->IsExpressEdition()) {
+    std::string env;
+    if (cmSystemTools::GetEnv("PlatformToolset", env) &&
+        env == "Windows7.1SDK") {
+      // We are running from a Windows7.1SDK command prompt.
+      this->DefaultPlatformToolset = "Windows7.1SDK";
+    } else if (this->IsExpressEdition()) {
       // The v100 64-bit toolset does not exist in the express edition.
       this->DefaultPlatformToolset.clear();
     }
