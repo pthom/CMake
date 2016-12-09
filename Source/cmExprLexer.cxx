@@ -1,3 +1,4 @@
+#include "cmStandardLexer.h"
 #line 2 "cmExprLexer.cxx"
 
 #line 4 "cmExprLexer.cxx"
