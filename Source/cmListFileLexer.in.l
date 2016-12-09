@@ -7,18 +7,17 @@ This file must be translated to C and modified to build everywhere.
 
 Run flex >= 2.6 like this:
 
-  flex --prefix=cmListFileLexer_yy -ocmListFileLexer.c cmListFileLexer.in.l
+  flex --nounistd -DFLEXINT_H --prefix=cmListFileLexer_yy -ocmListFileLexer.c cmListFileLexer.in.l
 
 Modify cmListFileLexer.c:
   - remove trailing whitespace: sed -i 's/\s*$//' cmListFileLexer.c
   - remove blank lines at end of file
-  - remove statement "yyscanner = NULL;" from cmListFileLexer_yylex_destroy
-  - remove all YY_BREAK lines occurring right after return statements
-  - remove unnecessary cast to (int) in yy_get_next_buffer
+  - #include "cmStandardLexer.h" at the top
+  - change type of variable yyl under yy_find_action from yy_size_t to int
+  - change type of variable i in cmListFileLexer_yy_scan_bytes from yy_size_t to int
 
 */
 
-#include "cmStandardLexer.h"
 #ifdef WIN32
 #include <cmsys/Encoding.h>
 #endif
@@ -33,7 +32,7 @@ Modify cmListFileLexer.c:
 struct cmListFileLexer_s
 {
   cmListFileLexer_Token token;
-  yy_size_t bracket;
+  int bracket;
   int comment;
   int line;
   int column;

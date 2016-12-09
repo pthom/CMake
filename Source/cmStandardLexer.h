@@ -3,6 +3,8 @@
 #ifndef cmStandardLexer_h
 #define cmStandardLexer_h
 
+#include <cmConfigure.h>
+
 /* Disable some warnings.  */
 #if defined(_MSC_VER)
 #pragma warning(disable : 4127)
@@ -16,13 +18,14 @@
 #pragma warning(disable : 4786)
 #endif
 
-/* Define isatty on windows.  */
+/* Make sure isatty is available. */
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include <io.h>
 #if defined(_MSC_VER)
 #define isatty _isatty
 #endif
-#define YY_NO_UNISTD_H 1
+#else
+#include <unistd.h>
 #endif
 
 /* Make sure malloc and free are available on QNX.  */
@@ -35,5 +38,13 @@
 #define YY_NO_INPUT 1
 #define YY_NO_UNPUT 1
 #define ECHO
+
+#include <cm_kwiml.h>
+typedef KWIML_INT_int8_t flex_int8_t;
+typedef KWIML_INT_uint8_t flex_uint8_t;
+typedef KWIML_INT_int16_t flex_int16_t;
+typedef KWIML_INT_uint16_t flex_uint16_t;
+typedef KWIML_INT_int32_t flex_int32_t;
+typedef KWIML_INT_uint32_t flex_uint32_t;
 
 #endif
