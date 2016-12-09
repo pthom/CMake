@@ -23,7 +23,6 @@ Modify cmFortranLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmFortranLexer.h cmFortranLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
-  - change type of variable i in cmFortran_yy_scan_bytes from yy_size_t to int
 
 */
 

@@ -13,7 +13,6 @@ Modify cmDependsJavaLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmDependsJavaLexer.h cmDependsJavaLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
-  - change type of variable i in cmDependsJava_yy_scan_bytes from yy_size_t to int
 
 */
 
