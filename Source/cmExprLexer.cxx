@@ -456,7 +456,6 @@ Modify cmExprLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmExprLexer.h cmExprLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
-  - change type of variable i in cmExpr_yy_scan_bytes from yy_size_t to int
 
 */
 
@@ -471,7 +470,7 @@ Modify cmExprLexer.cxx:
 #include "cmExprParserTokens.h"
 
 /*--------------------------------------------------------------------------*/
-#line 474 "cmExprLexer.cxx"
+#line 473 "cmExprLexer.cxx"
 
 #define INITIAL 0
 
@@ -724,10 +723,10 @@ YY_DECL
 		}
 
 	{
-#line 37 "cmExprLexer.in.l"
+#line 36 "cmExprLexer.in.l"
 
 
-#line 730 "cmExprLexer.cxx"
+#line 729 "cmExprLexer.cxx"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -786,80 +785,80 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 39 "cmExprLexer.in.l"
+#line 38 "cmExprLexer.in.l"
 { yylvalp->Number = atoi(yytext); return exp_NUMBER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 41 "cmExprLexer.in.l"
+#line 40 "cmExprLexer.in.l"
 { return exp_PLUS; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 42 "cmExprLexer.in.l"
+#line 41 "cmExprLexer.in.l"
 { return exp_MINUS; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 43 "cmExprLexer.in.l"
+#line 42 "cmExprLexer.in.l"
 { return exp_TIMES; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 44 "cmExprLexer.in.l"
+#line 43 "cmExprLexer.in.l"
 { return exp_DIVIDE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 45 "cmExprLexer.in.l"
+#line 44 "cmExprLexer.in.l"
 { return exp_MOD; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 46 "cmExprLexer.in.l"
+#line 45 "cmExprLexer.in.l"
 { return exp_OR; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 47 "cmExprLexer.in.l"
+#line 46 "cmExprLexer.in.l"
 { return exp_AND; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 48 "cmExprLexer.in.l"
+#line 47 "cmExprLexer.in.l"
 { return exp_XOR; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 49 "cmExprLexer.in.l"
+#line 48 "cmExprLexer.in.l"
 { return exp_NOT; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 50 "cmExprLexer.in.l"
+#line 49 "cmExprLexer.in.l"
 { return exp_SHIFTLEFT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 51 "cmExprLexer.in.l"
+#line 50 "cmExprLexer.in.l"
 { return exp_SHIFTRIGHT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 52 "cmExprLexer.in.l"
+#line 51 "cmExprLexer.in.l"
 { return exp_OPENPARENT; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 53 "cmExprLexer.in.l"
+#line 52 "cmExprLexer.in.l"
 { return exp_CLOSEPARENT; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 55 "cmExprLexer.in.l"
+#line 54 "cmExprLexer.in.l"
 ECHO;
 	YY_BREAK
-#line 862 "cmExprLexer.cxx"
+#line 861 "cmExprLexer.cxx"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1643,7 +1642,7 @@ YY_BUFFER_STATE cmExpr_yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_len
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
 
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = (yy_size_t) _yybytes_len + 2;
@@ -2028,4 +2027,4 @@ void cmExpr_yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 55 "cmExprLexer.in.l"
+#line 54 "cmExprLexer.in.l"

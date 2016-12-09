@@ -3,7 +3,7 @@
 #ifndef cmStandardLexer_h
 #define cmStandardLexer_h
 
-#include <cmConfigure.h>
+#include <cmConfigure.h> // IWYU pragma: keep
 
 /* Disable some warnings.  */
 #if defined(_MSC_VER)
@@ -18,6 +18,11 @@
 #pragma warning(disable : 4786)
 #endif
 
+#if defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 402
+#pragma GCC diagnostic ignored "-Wconversion"
+#pragma GCC diagnostic ignored "-Wsign-compare"
+#endif
+
 /* Make sure isatty is available. */
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include <io.h>
@@ -25,7 +30,7 @@
 #define isatty _isatty
 #endif
 #else
-#include <unistd.h>
+#include <unistd.h> // IWYU pragma: export
 #endif
 
 /* Make sure malloc and free are available on QNX.  */

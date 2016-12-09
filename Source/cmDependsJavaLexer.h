@@ -328,7 +328,7 @@ extern int cmDependsJava_yylex (yyscan_t yyscanner);
 #undef YY_DECL
 #endif
 
-#line 172 "cmDependsJavaLexer.in.l"
+#line 171 "cmDependsJavaLexer.in.l"
 
 
 #line 335 "cmDependsJavaLexer.h"
