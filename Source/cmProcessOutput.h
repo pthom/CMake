@@ -32,7 +32,7 @@ public:
   * \param name a encoding name.
   * \return encoding enum value or Auto if \a name was not found.
   */
-  static Encoding FindEncoding(std::string name);
+  static Encoding FindEncoding(std::string const& name);
 
   /// The code page that is used as internal encoding to which we will encode.
   static unsigned int defaultCodepage;
@@ -57,7 +57,7 @@ public:
    * keep incomplete characters in separate buffers for each stream.
    * \return true if successfully decoded \a raw to \a decoded or false if not.
    */
-  bool DecodeText(std::string raw, std::string& decoded, size_t id = 0);
+  bool DecodeText(std::string const& raw, std::string& decoded, size_t id = 0);
   /**
    * Decode \a data with \a length from external encoding to internal
    * encoding in \a decoded.
