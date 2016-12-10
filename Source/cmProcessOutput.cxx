@@ -9,7 +9,8 @@ unsigned int cmProcessOutput::defaultCodepage =
   KWSYS_ENCODING_DEFAULT_CODEPAGE;
 #endif
 
-cmProcessOutput::Encoding cmProcessOutput::FindEncoding(std::string name)
+cmProcessOutput::Encoding cmProcessOutput::FindEncoding(
+  std::string const& name)
 {
   Encoding encoding = Auto;
   if (name == "UTF8") {
@@ -51,7 +52,7 @@ cmProcessOutput::~cmProcessOutput()
 {
 }
 
-bool cmProcessOutput::DecodeText(std::string raw, std::string& decoded,
+bool cmProcessOutput::DecodeText(std::string const& raw, std::string& decoded,
                                  size_t id)
 {
   bool success = true;
