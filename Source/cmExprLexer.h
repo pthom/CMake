@@ -326,7 +326,7 @@ extern int cmExpr_yylex (yyscan_t yyscanner);
 #undef YY_DECL
 #endif
 
-#line 54 "cmExprLexer.in.l"
+#line 57 "cmExprLexer.in.l"
 
 
 #line 333 "cmExprLexer.h"

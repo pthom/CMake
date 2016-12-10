@@ -663,8 +663,11 @@ Modify cmFortranLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmFortranLexer.h cmFortranLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
+  - add cast in cmFortran_yy_scan_bytes for loop condition of _yybytes_len to size_t
 
 */
+
+/* IWYU pragma: no_forward_declare yyguts_t */
 
 #undef YY_NO_UNPUT
 
@@ -682,7 +685,7 @@ Modify cmFortranLexer.cxx:
 /*--------------------------------------------------------------------------*/
 
 
-#line 685 "cmFortranLexer.cxx"
+#line 688 "cmFortranLexer.cxx"
 
 #define INITIAL 0
 #define free_fmt 1
@@ -942,10 +945,10 @@ YY_DECL
 		}
 
 	{
-#line 53 "cmFortranLexer.in.l"
+#line 56 "cmFortranLexer.in.l"
 
 
-#line 948 "cmFortranLexer.cxx"
+#line 951 "cmFortranLexer.cxx"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1005,7 +1008,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 55 "cmFortranLexer.in.l"
+#line 58 "cmFortranLexer.in.l"
 {
   cmFortranParser_StringStart(yyextra);
   cmFortranParser_SetOldStartcond(yyextra, YY_START);
@@ -1014,7 +1017,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 61 "cmFortranLexer.in.l"
+#line 64 "cmFortranLexer.in.l"
 {
   cmFortranParser_StringStart(yyextra);
   cmFortranParser_SetOldStartcond(yyextra, YY_START);
@@ -1022,10 +1025,10 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case 3:
-#line 68 "cmFortranLexer.in.l"
+#line 71 "cmFortranLexer.in.l"
 case 4:
 YY_RULE_SETUP
-#line 68 "cmFortranLexer.in.l"
+#line 71 "cmFortranLexer.in.l"
 {
   BEGIN(cmFortranParser_GetOldStartcond(yyextra) );
   yylvalp->string = strdup(cmFortranParser_StringEnd(yyextra));
@@ -1034,17 +1037,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
-#line 75 "cmFortranLexer.in.l"
+#line 78 "cmFortranLexer.in.l"
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 75 "cmFortranLexer.in.l"
+#line 78 "cmFortranLexer.in.l"
 /* Ignore (continued strings, free fmt) */
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 77 "cmFortranLexer.in.l"
+#line 80 "cmFortranLexer.in.l"
 {
   if (cmFortranParser_GetOldStartcond(yyextra) == fixed_fmt)
     ; /* Ignore (cont. strings, fixed fmt) */
@@ -1057,7 +1060,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 87 "cmFortranLexer.in.l"
+#line 90 "cmFortranLexer.in.l"
 {
   unput ('\n');
   BEGIN(INITIAL);
@@ -1066,7 +1069,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 93 "cmFortranLexer.in.l"
+#line 96 "cmFortranLexer.in.l"
 {
   cmFortranParser_StringAppend(yyextra, yytext[0]);
 }
@@ -1074,24 +1077,24 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 97 "cmFortranLexer.in.l"
+#line 100 "cmFortranLexer.in.l"
 { return EOSTMT; } /* Treat comments like */
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 98 "cmFortranLexer.in.l"
+#line 101 "cmFortranLexer.in.l"
 { return EOSTMT; } /* empty lines */
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 100 "cmFortranLexer.in.l"
+#line 103 "cmFortranLexer.in.l"
 { return CPP_LINE_DIRECTIVE; }
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 101 "cmFortranLexer.in.l"
+#line 104 "cmFortranLexer.in.l"
 {
   yytext[yyleng-1] = 0;
   yylvalp->string = strdup(strchr(yytext, '<')+1);
@@ -1100,171 +1103,171 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 106 "cmFortranLexer.in.l"
+#line 109 "cmFortranLexer.in.l"
 { return CPP_INCLUDE; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 107 "cmFortranLexer.in.l"
+#line 110 "cmFortranLexer.in.l"
 { return F90PPR_INCLUDE; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 108 "cmFortranLexer.in.l"
+#line 111 "cmFortranLexer.in.l"
 { return COCO_INCLUDE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 110 "cmFortranLexer.in.l"
+#line 113 "cmFortranLexer.in.l"
 { return CPP_DEFINE; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 111 "cmFortranLexer.in.l"
+#line 114 "cmFortranLexer.in.l"
 { return F90PPR_DEFINE; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 113 "cmFortranLexer.in.l"
+#line 116 "cmFortranLexer.in.l"
 { return CPP_UNDEF; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 114 "cmFortranLexer.in.l"
+#line 117 "cmFortranLexer.in.l"
 { return F90PPR_UNDEF; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 116 "cmFortranLexer.in.l"
+#line 119 "cmFortranLexer.in.l"
 { return CPP_IFDEF; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 117 "cmFortranLexer.in.l"
+#line 120 "cmFortranLexer.in.l"
 { return CPP_IFNDEF; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 118 "cmFortranLexer.in.l"
+#line 121 "cmFortranLexer.in.l"
 { return CPP_IF; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 119 "cmFortranLexer.in.l"
+#line 122 "cmFortranLexer.in.l"
 { return CPP_ELIF; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 120 "cmFortranLexer.in.l"
+#line 123 "cmFortranLexer.in.l"
 { return CPP_ELSE; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 121 "cmFortranLexer.in.l"
+#line 124 "cmFortranLexer.in.l"
 { return CPP_ENDIF; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 123 "cmFortranLexer.in.l"
+#line 126 "cmFortranLexer.in.l"
 { return F90PPR_IFDEF; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 124 "cmFortranLexer.in.l"
+#line 127 "cmFortranLexer.in.l"
 { return F90PPR_IFNDEF; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 125 "cmFortranLexer.in.l"
+#line 128 "cmFortranLexer.in.l"
 { return F90PPR_IF; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 126 "cmFortranLexer.in.l"
+#line 129 "cmFortranLexer.in.l"
 { return F90PPR_ELIF; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 127 "cmFortranLexer.in.l"
+#line 130 "cmFortranLexer.in.l"
 { return F90PPR_ELSE; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 128 "cmFortranLexer.in.l"
+#line 131 "cmFortranLexer.in.l"
 { return F90PPR_ENDIF; }
 	YY_BREAK
 /* Line continuations, possible involving comments.  */
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 131 "cmFortranLexer.in.l"
+#line 134 "cmFortranLexer.in.l"
 
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 132 "cmFortranLexer.in.l"
+#line 135 "cmFortranLexer.in.l"
 
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 134 "cmFortranLexer.in.l"
+#line 137 "cmFortranLexer.in.l"
 { return COMMA; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 136 "cmFortranLexer.in.l"
+#line 139 "cmFortranLexer.in.l"
 { return DCOLON; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 137 "cmFortranLexer.in.l"
+#line 140 "cmFortranLexer.in.l"
 { return COLON; }
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 139 "cmFortranLexer.in.l"
+#line 142 "cmFortranLexer.in.l"
 { return GARBAGE; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 141 "cmFortranLexer.in.l"
+#line 144 "cmFortranLexer.in.l"
 { return ASSIGNMENT_OP; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 143 "cmFortranLexer.in.l"
+#line 146 "cmFortranLexer.in.l"
 { return END; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 144 "cmFortranLexer.in.l"
+#line 147 "cmFortranLexer.in.l"
 { return INCLUDE; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 145 "cmFortranLexer.in.l"
+#line 148 "cmFortranLexer.in.l"
 { return INTERFACE; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 146 "cmFortranLexer.in.l"
+#line 149 "cmFortranLexer.in.l"
 { return MODULE; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 147 "cmFortranLexer.in.l"
+#line 150 "cmFortranLexer.in.l"
 { return SUBMODULE; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 148 "cmFortranLexer.in.l"
+#line 151 "cmFortranLexer.in.l"
 { return USE; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 150 "cmFortranLexer.in.l"
+#line 153 "cmFortranLexer.in.l"
 {
   yylvalp->string = strdup(yytext);
   return WORD;
@@ -1272,39 +1275,39 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 155 "cmFortranLexer.in.l"
+#line 158 "cmFortranLexer.in.l"
 { return LPAREN; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 156 "cmFortranLexer.in.l"
+#line 159 "cmFortranLexer.in.l"
 { return RPAREN; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 158 "cmFortranLexer.in.l"
+#line 161 "cmFortranLexer.in.l"
 { return GARBAGE; }
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 160 "cmFortranLexer.in.l"
+#line 163 "cmFortranLexer.in.l"
 { return EOSTMT; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 163 "cmFortranLexer.in.l"
+#line 166 "cmFortranLexer.in.l"
 /* Ignore */
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 164 "cmFortranLexer.in.l"
+#line 167 "cmFortranLexer.in.l"
 /* Ignore line-endings preceded by \ */
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 166 "cmFortranLexer.in.l"
+#line 169 "cmFortranLexer.in.l"
 { return *yytext; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1312,7 +1315,7 @@ case YY_STATE_EOF(free_fmt):
 case YY_STATE_EOF(fixed_fmt):
 case YY_STATE_EOF(str_sq):
 case YY_STATE_EOF(str_dq):
-#line 168 "cmFortranLexer.in.l"
+#line 171 "cmFortranLexer.in.l"
 {
   if(!cmFortranParser_FilePop(yyextra) )
     {
@@ -1322,10 +1325,10 @@ case YY_STATE_EOF(str_dq):
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 175 "cmFortranLexer.in.l"
+#line 178 "cmFortranLexer.in.l"
 ECHO;
 	YY_BREAK
-#line 1328 "cmFortranLexer.cxx"
+#line 1331 "cmFortranLexer.cxx"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2118,7 +2121,7 @@ YY_BUFFER_STATE cmFortran_yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_
 	if ( ! buf )
 		YY_FATAL_ERROR( "out of dynamic memory in cmFortran_yy_scan_bytes()" );
 
-	for ( i = 0; i < _yybytes_len; ++i )
+	for ( i = 0; i < (size_t)_yybytes_len; ++i )
 		buf[i] = yybytes[i];
 
 	buf[_yybytes_len] = buf[_yybytes_len+1] = YY_END_OF_BUFFER_CHAR;
@@ -2495,7 +2498,7 @@ void cmFortran_yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 175 "cmFortranLexer.in.l"
+#line 178 "cmFortranLexer.in.l"
 
 
 

@@ -328,7 +328,7 @@ extern int cmCommandArgument_yylex (yyscan_t yyscanner);
 #undef YY_DECL
 #endif
 
-#line 124 "cmCommandArgumentLexer.in.l"
+#line 127 "cmCommandArgumentLexer.in.l"
 
 
 #line 335 "cmCommandArgumentLexer.h"

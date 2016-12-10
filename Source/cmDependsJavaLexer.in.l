@@ -13,12 +13,15 @@ Modify cmDependsJavaLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmDependsJavaLexer.h cmDependsJavaLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
+  - add cast in yy_scan_bytes for loop condition of _yybytes_len to size_t
 
 */
 
-#include "cmDependsJavaParserHelper.h"
+/* IWYU pragma: no_forward_declare yyguts_t */
 
 #include <iostream>
+
+#include "cmDependsJavaParserHelper.h"
 
 /* Replace the lexer input function.  */
 #undef YY_INPUT
