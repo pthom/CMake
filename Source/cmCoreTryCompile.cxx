@@ -810,9 +810,7 @@ void cmCoreTryCompile::CleanupFiles(const char* binDir)
   for (unsigned long i = 0; i < dir.GetNumberOfFiles(); ++i) {
     const char* fileName = dir.GetFile(i);
     if (strcmp(fileName, ".") != 0 && strcmp(fileName, "..") != 0) {
-      std::pair<std::set<std::string>::iterator, bool> const inserted =
-        deletedFiles.insert(fileName);
-      if (inserted.second) {
+      if (deletedFiles.insert(fileName).second) {
         std::string const fullPath =
           std::string(binDir).append("/").append(fileName);
         if (cmSystemTools::FileIsDirectory(fullPath)) {
