@@ -462,8 +462,11 @@ Modify cmCommandArgumentLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmCommandArgumentLexer.h cmCommandArgumentLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
+  - add cast in cmCommandArgument_yy_scan_bytes for loop condition of _yybytes_len to size_t
 
 */
+
+/* IWYU pragma: no_forward_declare yyguts_t */
 
 #include "cmCommandArgumentParserHelper.h"
 
@@ -478,7 +481,7 @@ Modify cmCommandArgumentLexer.cxx:
 /*--------------------------------------------------------------------------*/
 
 
-#line 481 "cmCommandArgumentLexer.cxx"
+#line 484 "cmCommandArgumentLexer.cxx"
 
 #define INITIAL 0
 #define ESCAPES 1
@@ -731,10 +734,10 @@ YY_DECL
 		}
 
 	{
-#line 39 "cmCommandArgumentLexer.in.l"
+#line 42 "cmCommandArgumentLexer.in.l"
 
 
-#line 737 "cmCommandArgumentLexer.cxx"
+#line 740 "cmCommandArgumentLexer.cxx"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -793,7 +796,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 41 "cmCommandArgumentLexer.in.l"
+#line 44 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   yyextra->AllocateParserType(yylvalp, yytext+1, strlen(yytext)-2);
@@ -802,7 +805,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 47 "cmCommandArgumentLexer.in.l"
+#line 50 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   yyextra->AllocateParserType(yylvalp, yytext+1, strlen(yytext)-2);
@@ -811,7 +814,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 53 "cmCommandArgumentLexer.in.l"
+#line 56 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   yyextra->AllocateParserType(yylvalp, yytext+1, strlen(yytext)-2);
@@ -820,7 +823,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 59 "cmCommandArgumentLexer.in.l"
+#line 62 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
@@ -830,7 +833,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 66 "cmCommandArgumentLexer.in.l"
+#line 69 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
@@ -840,7 +843,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 73 "cmCommandArgumentLexer.in.l"
+#line 76 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
@@ -850,7 +853,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 80 "cmCommandArgumentLexer.in.l"
+#line 83 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
@@ -859,7 +862,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 86 "cmCommandArgumentLexer.in.l"
+#line 89 "cmCommandArgumentLexer.in.l"
 {
   if ( !yyextra->HandleEscapeSymbol(yylvalp, *(yytext+1)) )
     {
@@ -871,7 +874,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 94 "cmCommandArgumentLexer.in.l"
+#line 97 "cmCommandArgumentLexer.in.l"
 {
   //std::cerr << __LINE__ << " here: [" << yytext << "]" << std::endl;
   yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
@@ -880,7 +883,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 100 "cmCommandArgumentLexer.in.l"
+#line 103 "cmCommandArgumentLexer.in.l"
 {
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
   yylvalp->str = yyextra->DOLLARVariable;
@@ -889,7 +892,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 106 "cmCommandArgumentLexer.in.l"
+#line 109 "cmCommandArgumentLexer.in.l"
 {
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
   yylvalp->str = yyextra->LCURLYVariable;
@@ -898,7 +901,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 112 "cmCommandArgumentLexer.in.l"
+#line 115 "cmCommandArgumentLexer.in.l"
 {
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
   yylvalp->str = yyextra->BSLASHVariable;
@@ -907,7 +910,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 118 "cmCommandArgumentLexer.in.l"
+#line 121 "cmCommandArgumentLexer.in.l"
 {
   //yyextra->AllocateParserType(yylvalp, yytext, strlen(yytext));
   yylvalp->str = yyextra->BSLASHVariable;
@@ -916,10 +919,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 124 "cmCommandArgumentLexer.in.l"
+#line 127 "cmCommandArgumentLexer.in.l"
 ECHO;
 	YY_BREAK
-#line 922 "cmCommandArgumentLexer.cxx"
+#line 925 "cmCommandArgumentLexer.cxx"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ESCAPES):
 case YY_STATE_EOF(NOESCAPES):
@@ -1675,7 +1678,7 @@ YY_BUFFER_STATE cmCommandArgument_yy_scan_bytes  (yyconst char * yybytes, int  _
 	if ( ! buf )
 		YY_FATAL_ERROR( "out of dynamic memory in cmCommandArgument_yy_scan_bytes()" );
 
-	for ( i = 0; i < _yybytes_len; ++i )
+	for ( i = 0; i < (size_t)_yybytes_len; ++i )
 		buf[i] = yybytes[i];
 
 	buf[_yybytes_len] = buf[_yybytes_len+1] = YY_END_OF_BUFFER_CHAR;
@@ -2052,7 +2055,7 @@ void cmCommandArgument_yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 124 "cmCommandArgumentLexer.in.l"
+#line 127 "cmCommandArgumentLexer.in.l"
 
 
 

@@ -7,6 +7,7 @@
 
 /* Disable some warnings.  */
 #if defined(_MSC_VER)
+#pragma warning(disable : 4018)
 #pragma warning(disable : 4127)
 #pragma warning(disable : 4131)
 #pragma warning(disable : 4244)

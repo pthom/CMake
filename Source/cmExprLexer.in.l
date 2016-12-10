@@ -13,8 +13,11 @@ Modify cmExprLexer.cxx:
   - remove trailing whitespace: sed -i 's/\s*$//' cmExprLexer.h cmExprLexer.cxx
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
+  - add cast in yy_scan_bytes for loop condition of _yybytes_len to size_t
 
 */
+
+/* IWYU pragma: no_forward_declare yyguts_t */
 
 #include "cmExprParserHelper.h"
 
