@@ -20,8 +20,10 @@
 #endif
 
 #if defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 402
+#if !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#endif
 #endif
 
 /* Make sure isatty is available. */
