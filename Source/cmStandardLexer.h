@@ -23,6 +23,7 @@
 #if !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
 #endif
 
