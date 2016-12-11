@@ -538,7 +538,7 @@ std::vector<std::string> cmNinjaNormalTargetGenerator::ComputeLinkCmd()
     case cmStateEnums::EXECUTABLE:
       break;
     default:
-      assert(!"Unexpected target type");
+      assert(false && "Unexpected target type");
   }
   return std::vector<std::string>();
 }

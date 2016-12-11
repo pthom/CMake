@@ -351,7 +351,8 @@ std::string cmGeneratorExpression::Preprocess(const std::string& input,
     return stripExportInterface(input, context, resolveRelative);
   }
 
-  assert(!"cmGeneratorExpression::Preprocess called with invalid args");
+  assert(false &&
+         "cmGeneratorExpression::Preprocess called with invalid args");
   return std::string();
 }
 
