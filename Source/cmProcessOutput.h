@@ -57,7 +57,7 @@ public:
    * keep incomplete characters in separate buffers for each stream.
    * \return true if successfully decoded \a raw to \a decoded or false if not.
    */
-  bool DecodeText(std::string const& raw, std::string& decoded, size_t id = 0);
+  bool DecodeText(std::string raw, std::string& decoded, size_t id = 0);
   /**
    * Decode \a data with \a length from external encoding to internal
    * encoding in \a decoded.
