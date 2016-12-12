@@ -19,10 +19,12 @@
 #pragma warning(disable : 4786)
 #endif
 
-#if defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 402
-#if !defined(__INTEL_COMPILER)
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+#if ((__GNUC__ * 100) + __GNUC_MINOR__) >= 402
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#endif
+#if ((__GNUC__ * 100) + __GNUC_MINOR__) >= 403
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
 #endif
