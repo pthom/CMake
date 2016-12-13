@@ -14,6 +14,7 @@ Modify cmListFileLexer.c:
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
   - add cast in yy_scan_bytes for loop condition of _yybytes_len to size_t
+  - change type of variable yyl under yy_find_action from yy_size_t to int
 
 */
 
@@ -33,7 +34,7 @@ Modify cmListFileLexer.c:
 struct cmListFileLexer_s
 {
   cmListFileLexer_Token token;
-  yy_size_t bracket;
+  int bracket;
   int comment;
   int line;
   int column;
