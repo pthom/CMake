@@ -551,6 +551,7 @@ Modify cmListFileLexer.c:
   - remove blank lines at end of file
   - #include "cmStandardLexer.h" at the top
   - add cast in cmListFileLexer_yy_scan_bytes for loop condition of _yybytes_len to size_t
+  - change type of variable yyl under yy_find_action from yy_size_t to int
 
 */
 
@@ -570,7 +571,7 @@ Modify cmListFileLexer.c:
 struct cmListFileLexer_s
 {
   cmListFileLexer_Token token;
-  yy_size_t bracket;
+  int bracket;
   int comment;
   int line;
   int column;
@@ -602,7 +603,7 @@ static void cmListFileLexerDestroy(cmListFileLexer* lexer);
 
 
 
-#line 605 "cmListFileLexer.c"
+#line 606 "cmListFileLexer.c"
 
 #define INITIAL 0
 #define STRING 1
@@ -859,10 +860,10 @@ YY_DECL
 		}
 
 	{
-#line 79 "cmListFileLexer.in.l"
+#line 80 "cmListFileLexer.in.l"
 
 
-#line 865 "cmListFileLexer.c"
+#line 866 "cmListFileLexer.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -910,7 +911,7 @@ yy_find_action:
 
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
-			yy_size_t yyl;
+			int yyl;
 			for ( yyl = 0; yyl < yyleng; ++yyl )
 				if ( yytext[yyl] == '\n' )
 
@@ -934,7 +935,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 81 "cmListFileLexer.in.l"
+#line 82 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_Newline;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -947,7 +948,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 90 "cmListFileLexer.in.l"
+#line 91 "cmListFileLexer.in.l"
 {
   const char* bracket = yytext;
   lexer->comment = yytext[0] == '#';
@@ -970,7 +971,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 110 "cmListFileLexer.in.l"
+#line 111 "cmListFileLexer.in.l"
 {
   lexer->column += yyleng;
   BEGIN(COMMENT);
@@ -978,14 +979,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 115 "cmListFileLexer.in.l"
+#line 116 "cmListFileLexer.in.l"
 {
   lexer->column += yyleng;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 119 "cmListFileLexer.in.l"
+#line 120 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_ParenLeft;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -995,7 +996,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 126 "cmListFileLexer.in.l"
+#line 127 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_ParenRight;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1005,7 +1006,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 133 "cmListFileLexer.in.l"
+#line 134 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_Identifier;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1015,7 +1016,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 140 "cmListFileLexer.in.l"
+#line 141 "cmListFileLexer.in.l"
 {
   /* Handle ]]====]=======]*/
   cmListFileLexerAppend(lexer, yytext, yyleng);
@@ -1027,7 +1028,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 149 "cmListFileLexer.in.l"
+#line 150 "cmListFileLexer.in.l"
 {
   lexer->column += yyleng;
   /* Erase the partial bracket from the token.  */
@@ -1039,7 +1040,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 158 "cmListFileLexer.in.l"
+#line 159 "cmListFileLexer.in.l"
 {
   cmListFileLexerAppend(lexer, yytext, yyleng);
   lexer->column += yyleng;
@@ -1048,7 +1049,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 163 "cmListFileLexer.in.l"
+#line 164 "cmListFileLexer.in.l"
 {
   cmListFileLexerAppend(lexer, yytext, yyleng);
   ++lexer->line;
@@ -1058,7 +1059,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 170 "cmListFileLexer.in.l"
+#line 171 "cmListFileLexer.in.l"
 {
   cmListFileLexerAppend(lexer, yytext, yyleng);
   lexer->column += yyleng;
@@ -1067,7 +1068,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(BRACKET):
 case YY_STATE_EOF(BRACKETEND):
-#line 176 "cmListFileLexer.in.l"
+#line 177 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_BadBracket;
   BEGIN(INITIAL);
@@ -1076,7 +1077,7 @@ case YY_STATE_EOF(BRACKETEND):
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 182 "cmListFileLexer.in.l"
+#line 183 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_ArgumentUnquoted;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1086,7 +1087,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 189 "cmListFileLexer.in.l"
+#line 190 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_ArgumentUnquoted;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1096,7 +1097,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 196 "cmListFileLexer.in.l"
+#line 197 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_ArgumentUnquoted;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1106,7 +1107,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 203 "cmListFileLexer.in.l"
+#line 204 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_ArgumentQuoted;
   cmListFileLexerSetToken(lexer, "", 0);
@@ -1116,7 +1117,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 210 "cmListFileLexer.in.l"
+#line 211 "cmListFileLexer.in.l"
 {
   cmListFileLexerAppend(lexer, yytext, yyleng);
   lexer->column += yyleng;
@@ -1125,7 +1126,7 @@ YY_RULE_SETUP
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 215 "cmListFileLexer.in.l"
+#line 216 "cmListFileLexer.in.l"
 {
   /* Continuation: text is not part of string */
   ++lexer->line;
@@ -1135,7 +1136,7 @@ YY_RULE_SETUP
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 221 "cmListFileLexer.in.l"
+#line 222 "cmListFileLexer.in.l"
 {
   cmListFileLexerAppend(lexer, yytext, yyleng);
   ++lexer->line;
@@ -1144,7 +1145,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 227 "cmListFileLexer.in.l"
+#line 228 "cmListFileLexer.in.l"
 {
   lexer->column += yyleng;
   BEGIN(INITIAL);
@@ -1153,14 +1154,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 233 "cmListFileLexer.in.l"
+#line 234 "cmListFileLexer.in.l"
 {
   cmListFileLexerAppend(lexer, yytext, yyleng);
   lexer->column += yyleng;
 }
 	YY_BREAK
 case YY_STATE_EOF(STRING):
-#line 238 "cmListFileLexer.in.l"
+#line 239 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_BadString;
   BEGIN(INITIAL);
@@ -1169,7 +1170,7 @@ case YY_STATE_EOF(STRING):
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 244 "cmListFileLexer.in.l"
+#line 245 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_Space;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1179,7 +1180,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 251 "cmListFileLexer.in.l"
+#line 252 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_BadCharacter;
   cmListFileLexerSetToken(lexer, yytext, yyleng);
@@ -1189,7 +1190,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
-#line 258 "cmListFileLexer.in.l"
+#line 259 "cmListFileLexer.in.l"
 {
   lexer->token.type = cmListFileLexer_Token_None;
   cmListFileLexerSetToken(lexer, 0, 0);
@@ -1198,10 +1199,10 @@ case YY_STATE_EOF(COMMENT):
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 264 "cmListFileLexer.in.l"
+#line 265 "cmListFileLexer.in.l"
 ECHO;
 	YY_BREAK
-#line 1204 "cmListFileLexer.c"
+#line 1205 "cmListFileLexer.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2379,7 +2380,7 @@ void cmListFileLexer_yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 264 "cmListFileLexer.in.l"
+#line 265 "cmListFileLexer.in.l"
 
 
 
