@@ -127,7 +127,7 @@ endif()
 
 # Select Git source to use.
 if(NOT DEFINED KWSys_git_repo)
-  set(KWSys_git_repo "git://public.kitware.com/KWSys.git")
+  set(KWSys_git_repo "https://gitlab.kitware.com/utils/kwsys.git")
 endif()
 if(NOT DEFINED KWSys_git_branch)
   set(KWSys_git_branch master)
@@ -221,6 +221,12 @@ if(EXISTS ${CTEST_SOURCE_DIRECTORY})
   endif()
 endif()
 
+# Upstream non-head refs to treat like branches.
+set(KWSys_git_extra_branches
+  stage/master/head            # topics staged on master continuously
+  stage/master/nightly/latest  # updated nightly to stage/master/head
+  )
+
 # Support initial checkout if necessary.
 if(NOT EXISTS "${CTEST_SOURCE_DIRECTORY}"
     AND NOT DEFINED CTEST_CHECKOUT_COMMAND)
@@ -229,7 +235,7 @@ if(NOT EXISTS "${CTEST_SOURCE_DIRECTORY}"
   set(ctest_checkout_script ${CTEST_DASHBOARD_ROOT}/${_name}-init.cmake)
   file(WRITE ${ctest_checkout_script} "# git repo init script for ${_name}
 execute_process(
-  COMMAND \"${CTEST_GIT_COMMAND}\" clone -n -b ${KWSys_git_branch} -- \"${KWSys_git_repo}\"
+  COMMAND \"${CTEST_GIT_COMMAND}\" clone -n -- \"${KWSys_git_repo}\"
           \"${CTEST_SOURCE_DIRECTORY}\"
   )
 if(EXISTS \"${CTEST_SOURCE_DIRECTORY}/.git\")
@@ -237,23 +243,74 @@ if(EXISTS \"${CTEST_SOURCE_DIRECTORY}/.git\")
     COMMAND \"${CTEST_GIT_COMMAND}\" config core.autocrlf ${dashboard_git_crlf}
     WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
     )
+  foreach(b ${KWSys_git_extra_branches})
+    execute_process(
+      COMMAND \"${CTEST_GIT_COMMAND}\" config --add remote.origin.fetch +refs/\${b}:refs/remotes/origin/\${b}
+      WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
+      )
+  endforeach()
   execute_process(
-    COMMAND \"${CTEST_GIT_COMMAND}\" checkout
+    COMMAND \"${CTEST_GIT_COMMAND}\" fetch
+    WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
+    )
+  foreach(b ${KWSys_git_extra_branches})
+    execute_process(
+      COMMAND \"${CTEST_GIT_COMMAND}\" branch \${b} origin/\${b}
+      WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
+      )
+    execute_process(
+      COMMAND \"${CTEST_GIT_COMMAND}\" config branch.\${b}.remote origin
+      WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
+      )
+    execute_process(
+      COMMAND \"${CTEST_GIT_COMMAND}\" config branch.\${b}.merge refs/\${b}
+      WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
+      )
+  endforeach()
+  execute_process(
+    COMMAND \"${CTEST_GIT_COMMAND}\" checkout ${KWSys_git_branch}
     WORKING_DIRECTORY \"${CTEST_SOURCE_DIRECTORY}\"
     )
 endif()
 ")
   set(CTEST_CHECKOUT_COMMAND "\"${CMAKE_COMMAND}\" -P \"${ctest_checkout_script}\"")
 elseif(EXISTS "${CTEST_SOURCE_DIRECTORY}/.git")
-  # Start on the branch to be tested.
-  dashboard_git(rev-parse --verify -q refs/heads/${KWSys_git_branch})
-  if(dashboard_git_failed)
-    dashboard_git(checkout -b ${KWSys_git_branch} origin/${KWSys_git_branch})
-  else()
-    dashboard_git(checkout ${KWSys_git_branch})
+  # Upstream URL.
+  dashboard_git(config --get remote.origin.url)
+  if(NOT dashboard_git_output STREQUAL "${KWSys_git_repo}")
+    dashboard_git(config remote.origin.url "${KWSys_git_repo}")
   endif()
-  if(dashboard_git_failed)
-    message(FATAL_ERROR "Failed to checkout branch ${KWSys_git_branch}:\n${dashboard_git_output}")
+
+  # Local refs for remote branches.
+  set(added_branches 0)
+  foreach(b ${KWSys_git_extra_branches})
+    dashboard_git(rev-parse --verify -q refs/remotes/origin/${b})
+    if(dashboard_git_failed)
+      dashboard_git(config --add remote.origin.fetch +refs/${b}:refs/remotes/origin/${b})
+      set(added_branches 1)
+    endif()
+  endforeach()
+  if(added_branches)
+    dashboard_git(fetch origin)
+  endif()
+
+  # Local branches.
+  foreach(b ${KWSys_git_extra_branches})
+    dashboard_git(rev-parse --verify -q refs/heads/${b})
+    if(dashboard_git_failed)
+      dashboard_git(branch ${b} origin/${b})
+      dashboard_git(config branch.${b}.remote origin)
+      dashboard_git(config branch.${b}.merge refs/${b})
+    endif()
+  endforeach()
+
+  # Local checkout.
+  dashboard_git(symbolic-ref HEAD)
+  if(NOT dashboard_git_output STREQUAL "${KWSys_git_branch}")
+    dashboard_git(checkout ${KWSys_git_branch})
+    if(dashboard_git_failed)
+      message(FATAL_ERROR "Failed to checkout branch ${KWSys_git_branch}:\n${dashboard_git_output}")
+    endif()
   endif()
 endif()
 
