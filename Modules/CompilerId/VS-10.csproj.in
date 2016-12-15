@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|@id_platform@">
-      <Configuration>Debug</Configuration>
-      <Platform>@id_platform@</Platform>
-    </ProjectConfiguration>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CAE07175-D007-4FC3-BFE8-47B392814159}</ProjectGuid>
     <RootNamespace>CompilerId@id_lang@</RootNamespace>
@@ -15,7 +9,6 @@
     @id_WindowsTargetPlatformVersion@
     @id_WindowsSDKDesktopARMSupport@
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <PropertyGroup>
     @id_PreferredToolArchitecture@
   </PropertyGroup>
@@ -54,8 +47,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
     <PostBuildEvent>cd /D &quot;$(MSBuildToolsPath)&quot;
 if not %errorlevel%==0 exit -1
 if not exist @id_cl@ exit -2
