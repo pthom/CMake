@@ -278,7 +278,7 @@ if (CMAKE_CXX_COMPILE_FEATURES)
 
   add_executable(CompileFeatures main.cpp)
   set_property(TARGET CompileFeatures
-    PROPERTY COMPILE_FEATURES "cxx_auto_type"
+    PROPERTY COMPILE_FEATURES "cxx_long_long_type"
   )
   set_property(TARGET CompileFeatures
     PROPERTY CXX_STANDARD_REQUIRED TRUE

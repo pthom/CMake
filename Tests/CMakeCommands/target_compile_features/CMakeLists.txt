@@ -32,7 +32,7 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   endif()
   add_executable(target_compile_features${target_suffix} main.cpp)
   target_compile_features(target_compile_features${target_suffix}
-    PRIVATE cxx_auto_type
+    PRIVATE cxx_long_long_type
   )
 
   add_library(lib_auto_type lib_auto_type.cpp)
