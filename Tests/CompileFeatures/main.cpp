@@ -1,6 +1,6 @@
 
 int main(int, char**)
 {
-  auto value = 0;
-  return value;
+  long long value = 1 << 31;
+  return (value << 1) != 0;
 }
