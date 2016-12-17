@@ -1,7 +1,7 @@
 
-#include "lib_auto_type.h"
+#include "lib_long_long_type.h"
 
 int main(int argc, char** argv)
 {
-  return getAutoType();
+  return getLLType(42);
 }
