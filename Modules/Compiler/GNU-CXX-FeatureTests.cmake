@@ -2,7 +2,7 @@
 # Reference: http://gcc.gnu.org/projects/cxx0x.html
 # http://gcc.gnu.org/projects/cxx1y.html
 
-set(_cmake_oldestSupported "(__GNUC__ * 100 + __GNUC_MINOR__) >= 304")
+set(_cmake_oldestSupported "(__GNUC__ * 100 + __GNUC_MINOR__) >= 404")
 
 set(GNU50_CXX14 "(__GNUC__ * 100 + __GNUC_MINOR__) >= 500 && __cplusplus >= 201402L")
 set(_cmake_feature_test_cxx_variable_templates "${GNU50_CXX14}")
@@ -86,24 +86,24 @@ set(_cmake_feature_test_cxx_trailing_return_types "${GNU44_CXX11}")
 set(_cmake_feature_test_cxx_unicode_literals "${GNU44_CXX11}")
 set(_cmake_feature_test_cxx_uniform_initialization "${GNU44_CXX11}")
 set(_cmake_feature_test_cxx_variadic_templates "${GNU44_CXX11}")
-# There chould possibly
+# TODO: If features are ever recorded for GNU 4.3, there should possibly
 # be a new feature added like cxx_variadic_template_template_parameters,
 # which is implemented by GNU 4.4, but not 4.3. cxx_variadic_templates is
 # actually implemented by GNU 4.3, but variadic template template parameters
 # 'completes' it, so that is the version we record as having the variadic
 # templates capability in CMake. See
 # http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2555.pdf
-set(GNU43_CXX11 "(__GNUC__ * 100 + __GNUC_MINOR__) >= 403 && ${GNU_CXX0X_DEFINED}")
+# TODO: Should be supported by GNU 4.3
+set(GNU43_CXX11 "${_cmake_oldestSupported} && ${GNU_CXX0X_DEFINED}")
 set(_cmake_feature_test_cxx_decltype "${GNU43_CXX11}")
 set(_cmake_feature_test_cxx_default_function_template_args "${GNU43_CXX11}")
+set(_cmake_feature_test_cxx_long_long_type "${GNU43_CXX11}")
 set(_cmake_feature_test_cxx_right_angle_brackets "${GNU43_CXX11}")
 set(_cmake_feature_test_cxx_rvalue_references "${GNU43_CXX11}")
 set(_cmake_feature_test_cxx_static_assert "${GNU43_CXX11}")
-set(GNU34_CXX11 "(__GNUC__ * 100 + __GNUC_MINOR__) >= 304")
 # TODO: Should be supported since GNU 3.4?
-set(_cmake_feature_test_cxx_extern_templates "${GNU44_CXX11}")
+set(_cmake_feature_test_cxx_extern_templates "${_cmake_oldestSupported} && ${GNU_CXX0X_DEFINED}")
 # TODO: Should be supported forever?
-set(_cmake_feature_test_cxx_long_long_type "${_cmake_oldestSupported}")
-set(_cmake_feature_test_cxx_func_identifier "${_cmake_oldestSupported}")
-set(_cmake_feature_test_cxx_variadic_macros "${_cmake_oldestSupported}")
+set(_cmake_feature_test_cxx_func_identifier "${_cmake_oldestSupported} && ${GNU_CXX0X_DEFINED}")
+set(_cmake_feature_test_cxx_variadic_macros "${_cmake_oldestSupported} && ${GNU_CXX0X_DEFINED}")
 set(_cmake_feature_test_cxx_template_template_parameters "${_cmake_oldestSupported} && __cplusplus")
