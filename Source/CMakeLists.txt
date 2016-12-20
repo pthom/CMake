@@ -785,7 +785,7 @@ target_link_libraries(CMakeLib cmsys
   ${CMake_KWIML_LIBRARIES}
   )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR STREQUAL "sparc")
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "sparc")
   # the atomic instructions are implemented using libatomic on some platforms,
   # so linking to that may be required
   check_library_exists(atomic __atomic_fetch_add_4 "" LIBATOMIC_NEEDED)
